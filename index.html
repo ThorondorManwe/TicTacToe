@@ -9,9 +9,27 @@
 
     <body>
         <div class="main">
+
+            <!-- Boton para elegir el ícono si un jugador elije uno el otro juega con el que queda, obvio-->
+            <div class="contenedor">
+                <form action="" class="formulario" id="formulario" name="formulario">
+                    <div class="contenedor-inputs">
+                        <input type="text" name="nombre1" placeholder="Nombre Jugador 1" required>
+                        <input type="text" name="nombre2" placeholder="Nombre Jugador 2" required>
+
+                    </div>
+
+                    <input type="submit" class="btn" value="Play">
+
+                </form>
+            </div>
             
             <!--Contenedor principal para hacer la cuadrícula-->
             <div class="gameboard"></div>
+
+
+            <!-- Button to reset the gameboard-->
+            <button onclick="gameBoard.resetBoard()" id="clear">Clear Gameboard</button>
 
         </div>
     </body>
