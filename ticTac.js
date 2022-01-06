@@ -53,6 +53,14 @@ const gameBoard = (() => {
     }
   }
 
+  const getAllIndexes = (arr, val) => {
+    let indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes;
+  }
+
   /* Aquí una función que crea los objectos de jugador con el factory y toma los datos del formulario
   Después activa getBoard con la división de cada turno y la figura que le toca a cada quien */
 
@@ -63,6 +71,19 @@ const gameBoard = (() => {
     const divs = document.querySelectorAll('.ticTac');
 
     const game = flowOfTheGame(player1, player2);
+
+    const winPlayer = document.querySelector('.winner');
+
+    const winConditions = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
 
 
     divs.forEach((div) => {
@@ -79,6 +100,29 @@ const gameBoard = (() => {
             console.log(game.currentPlayer.name);
             console.log(board);
             this.textContent = game.currentPlayer.plays;
+            // Revisa si hay espacio en el array
+            if(board.includes('') === false) {
+              console.log('Ya no hay lugares');
+              const tie = document.createElement('p');
+              tie.textContent = 'Its a tie';
+              winPlayer.appendChild(tie);
+            }
+            // Aquí llama la función que extrae los index de todos los marker en el array board
+            let indexBoard = getAllIndexes(board, game.currentPlayer.plays);
+            console.log(typeof indexBoard);
+            console.log(`El index de todos los markers ${game.currentPlayer.plays} es ${indexBoard}.`);
+            // Compara los index vs las posiciones en el winConditions array y anuncia el ganador en caso de haberlo
+            const indexesText = JSON.stringify(indexBoard);
+            console.log(indexesText);
+            for (const element of winConditions) {
+              if(JSON.stringify(element) === indexesText) {
+                const win = document.createElement('li');
+                win.textContent =`${game.currentPlayer.name} es ganador con ${game.currentPlayer.plays}!`;
+                console.log(`${game.currentPlayer.plays} es ganador`);
+                winPlayer.appendChild(win);
+                resetBoard();
+              }
+            }
             game.switchPlayers();
           }
         }
@@ -90,7 +134,8 @@ const gameBoard = (() => {
     setCell,
     getBoard,
     renderContent,
-    resetBoard
+    resetBoard,
+    getAllIndexes,
   }
 })();
 
@@ -122,9 +167,6 @@ const flowOfTheGame = (player1Name, player2Name) => {
   }
 };
 
-/* console.log(gameBoard); */
-
-
 
 /* Modify the array inside the gameBoard object */
 /* Access to the gameboard array*/
@@ -132,8 +174,6 @@ const flowOfTheGame = (player1Name, player2Name) => {
 console.log(gameboard);
 gameboard[0] = "O";
 console.log(gameboard);
-
-renderContent(); */
 
 /* the logic that checks for when the game is over */
 /*
